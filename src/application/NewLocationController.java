@@ -1,111 +1,110 @@
 package application;
 
-import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
- * Controller class for the NewLocation.fxml file.
- * This class handles the logic and functionality of the UI components defined in the FXML file.
+ * Controller for managing the "New Location" form in the application.
  */
 public class NewLocationController {
-	
-	@FXML TextField locationNameLabel; // Text field for entering location category name
-	@FXML Label locationDisplayLabel; // Label for displaying location category information
-	
-	/**
-     * Initializes the controller class. 
-     * This method is automatically called after the FXML file has been loaded.
+
+    @FXML
+    private TextField locationNameLabel; // TextField for entering the name of the location
+
+    @FXML
+    private Label locationDisplayLabel; // Label for displaying feedback to the user
+
+    @FXML
+    private TextArea locationDescriptionLabel; // TextArea for entering the description of the location
+
+    /**
+     * Initializes the controller. This method is automatically called after the FXML fields are injected.
      */
-	public void initialize() {
-		// Set initial text for location category display label
-		locationDisplayLabel.setText("No location category defined yet."); 
+    public void initialize() {
+        locationDisplayLabel.setText("No location category defined yet."); // Set initial text for the display label
     }
-	
-	/**
-     * Handles the action event when the "Add Location Category" button is clicked.
-     * Reads the text entered in the locationNameLabel text field and updates the locationDisplayLabel accordingly.
-     * If the locationNameLabel is empty, displays an error message.
+
+    /**
+     * Adds a new location category based on user input from the form.
      */
-	public void addLocation() {
-		String locationCategoryName = locationNameLabel.getText(); // Get the text entered in the locationNameLabel
-		if (locationCategoryName.isEmpty()) {
-			// Display error message if location category name is empty
-			locationDisplayLabel.setText("Error. Must define location category name!");
-		}
-		else {
-			// Display the new location category name
-			locationDisplayLabel.setText("New location category defined: " + locationCategoryName);
-			saveLocationCategoryToCSV(locationCategoryName); //Saves the location to CSV file
-			locationNameLabel.setText(""); // Clears the text field once the locationName is saved.
-		}
-		
-	}
-	/**
-	 * Saves the entered location category name to a CSV file.
-	 * @param locationCategoryName The name of the location category to be saved.
-	 */
-	public void saveLocationCategoryToCSV(String locationCategoryName) {
-	    String filePath = "location_categories.csv"; // The path to the CSV file.
-	    
-	    // Check if the file already exists, and if not, create it.
-	    try {
-	        if (!Files.exists(Paths.get(filePath))) {
-	            Files.createFile(Paths.get(filePath));
-	        }
-	        
-	        // Use FileWriter and BufferedWriter to write to the CSV file.
-	        try (FileWriter fw = new FileWriter(filePath, true);
-	             BufferedWriter bw = new BufferedWriter(fw);
-	             PrintWriter out = new PrintWriter(bw)) {
-	            out.println(locationCategoryName); // Write the location category name to the file.
-	        } catch (IOException e) {
-	            System.err.println("Error writing to CSV file: " + e.getMessage());
-	            // Handle the exception appropriately, such as showing a dialog to the user.
-	        }
-	    } catch (IOException ex) {
-	        System.err.println("An error occurred initializing the CSV file: " + ex.getMessage());
-	        // Handle the exception appropriately.
-	    }
-	}
-	
-	/**
-    
-	Handles the action event when the "Back To Home" button is clicked.
-	Loads the home-page FXML file and sets it as the scene for the stage.
-	*/
-	public void goHome() {
-	    try {// Load the FXML file for the welcome page
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Welcome.fxml"));
-	        Parent root = loader.load();
+    public void addLocation() {
+        String locationName = locationNameLabel.getText(); // Get the location name from the text field
 
-	            // Get the stage from the current scene
-	            Stage stage = (Stage) locationNameLabel.getScene().getWindow();
+        // Check if the location name is empty
+        if (locationName.isEmpty()) {
+            locationDisplayLabel.setText("Error. Must define location category name!"); // Show error message
+        } else {
+            locationDisplayLabel.setText("New location category defined: " + locationName); // Show success message
 
-	            // Set the new scene for the stage
-	            Scene scene = new Scene(root);
+            // Use the Builder pattern to create a new LocationInfo object
+            LocationInfo.Builder builder = new LocationInfo.Builder(locationName)
+                    .setDescriptionFromTextField(locationDescriptionLabel.getText());
 
-	            // Set the title of the stage
-	            stage.setTitle("Welcome to TrackWise");
+            LocationInfo location = builder.build(); // Build the LocationInfo object
+            saveLocationCategoryToCSV(location); // Save the location to a CSV file
 
-	            stage.setScene(scene);
-	            stage.show();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            // Handle the exception appropriately
-	        }
-	    }
-	
-	
+            // Clear the form fields
+            locationNameLabel.setText("");
+            locationDescriptionLabel.setText("");
+        }
+    }
+
+    /**
+     * Saves the location details to a CSV file.
+     * @param location The location information to save.
+     */
+    public void saveLocationCategoryToCSV(LocationInfo location) {
+        String filePath = "locations.csv"; // Define the file path for the CSV file
+
+        try {
+            // Check if the file does not exist and create it if necessary
+            if (!Files.exists(Paths.get(filePath))) {
+                Files.createFile(Paths.get(filePath));
+            }
+
+            // Write the location details to the CSV file
+            try (FileWriter fw = new FileWriter(filePath, true);
+                 BufferedWriter bw = new BufferedWriter(fw);
+                 PrintWriter out = new PrintWriter(bw)) {
+                out.print(location.getName()); // Write the location name
+                if (location.getDescription() != null && !location.getDescription().isEmpty()) {
+                    out.print(", " + location.getDescription()); // Write the location description if present
+                }
+                out.println(); // Move to a new line in the file
+            } catch (IOException e) {
+                System.err.println("Error writing to CSV file: " + e.getMessage()); // Handle possible I/O errors
+            }
+        } catch (IOException ex) {
+            System.err.println("An error occurred initializing the CSV file: " + ex.getMessage()); // Handle file creation errors
+        }
+    }
+
+    /**
+     * Navigates back to the home/welcome screen of the application.
+     */
+    public void goHome() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Welcome.fxml")); // Load the welcome view
+            Parent root = loader.load(); // Load the root element from the FXML
+            Stage stage = (Stage) locationNameLabel.getScene().getWindow(); // Get the current stage
+            Scene scene = new Scene(root); // Create a new scene with the loaded root
+            stage.setTitle("Welcome to TrackWise"); // Set the stage title
+            stage.setScene(scene); // Set the new scene on the stage
+            stage.show(); // Display the stage
+        } catch (IOException e) {
+            e.printStackTrace(); // Print stack trace if an exception occurs
+        }
+    }
 }
