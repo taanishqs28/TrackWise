@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,12 +12,15 @@
 
 <AnchorPane prefHeight="456.0" prefWidth="626.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NewLocationController">
    <children>
+   
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e9f2e3" height="468.0" layoutY="-8.0" stroke="BLACK" strokeType="INSIDE" width="628.0" />
-      <Label fx:id="locationDisplayLabel" alignment="CENTER" layoutX="113.0" layoutY="91.0" prefHeight="92.0" prefWidth="402.0" text="No location category defined yet.">
+      
+      <Label fx:id="locationDisplayLabel" alignment="CENTER" layoutX="114.0" layoutY="34.0" prefHeight="92.0" prefWidth="402.0" text="No location defined yet.">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
+      
       <Button alignment="CENTER" layoutX="215.0" layoutY="254.0" mnemonicParsing="false" onAction="#addLocation" prefHeight="92.0" prefWidth="198.0" text="Add new location">
          <font>
             <Font size="20.0" />
@@ -28,11 +32,26 @@
             <DropShadow color="#60a872" />
          </effect>
       </Button>
-      <TextField fx:id="locationNameLabel" alignment="CENTER" layoutX="93.0" layoutY="201.0" prefHeight="31.0" prefWidth="441.0" promptText="Enter location category name">
+      
+      <TextField fx:id="locationNameLabel" alignment="CENTER" layoutX="94.0" layoutY="144.0" prefHeight="31.0" prefWidth="441.0" promptText="Enter location name">
          <effect>
             <DropShadow color="#337c3d" />
          </effect>
       </TextField>
+      
       <Button layoutX="39.0" layoutY="368.0" mnemonicParsing="false" onAction="#goHome" prefHeight="54.0" prefWidth="147.0" text="Back to Home" />
+      
+      <Label layoutX="15.0" layoutY="10.0" prefHeight="20.0" prefWidth="600.0" text="Fields with a red asterisk (*) are required." textFill="red">
+      		<font>
+                <Font size="14.0" />
+            </font>
+      </Label>
+        
+      <TextArea fx:id="locationDescriptionLabel" layoutX="89.0" layoutY="185.0" prefHeight="54.0" prefWidth="452.0" promptText="Enter location description" />
+      <Label layoutX="75.0" layoutY="145.0" prefHeight="20.0" prefWidth="14.0" text="*" textFill="red">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
