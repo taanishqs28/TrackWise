@@ -121,6 +121,23 @@ public class EditAssetController {
 
 			
 			overWriteCSV();
+			returnSearchPage();
+		}
+	}
+	
+	//Returns to SearchPage once its confirmed:
+	@FXML
+	private void returnSearchPage() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Search.fxml"));
+			Parent root = loader.load();
+			Stage stage = (Stage) assetNameLabel.getScene().getWindow();
+			Scene scene = new Scene(root);
+			stage.setTitle("Search Asset");
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
