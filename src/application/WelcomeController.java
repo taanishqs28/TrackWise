@@ -28,8 +28,10 @@ public class WelcomeController {
     @FXML
     private void initialize() {
         // Initialization code here
+    	
     }
-
+    
+    
     /**
      * The goToCategoryPage method is called when the "enter category" button is clicked.
      * It navigates to the NewCategory page.
@@ -40,7 +42,7 @@ public class WelcomeController {
     private void goToCategoryPage(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow(); // Gets the stage from the event source
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/NewCategory.fxml")); // Load the FXML file for Sample page
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/NewCategory.fxml")); // Load the FXML file for page
             Parent root = loader.load(); // Loads the root element of the FXML file
             Scene scene = new Scene(root); // Creates a new scene with the loaded root element
             stage.setScene(scene); // Sets the scene to the stage
@@ -61,7 +63,7 @@ public class WelcomeController {
     private void goToLocationPage(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow(); // Gets the stage from the event source
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/NewLocation.fxml")); // Load the FXML file for Sample page
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/NewLocation.fxml")); // Load the FXML file for page
             Parent root = loader.load(); // Loads the root element of the FXML file
             Scene scene = new Scene(root); // Creates a new scene with the loaded root element
             stage.setScene(scene); // Sets the scene to the stage
@@ -71,4 +73,84 @@ public class WelcomeController {
             e.printStackTrace(); // Prints the stack trace if an exception occurs
         }
     }
+    @FXML
+    private void goToAssetPage(ActionEvent event) {
+    	
+    	try {
+    		Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+    		 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/NewAsset.fxml")); // Load the FXML file for page
+             Parent root = loader.load(); // Loads the root element of the FXML file
+             Scene scene = new Scene(root); // Creates a new scene with the loaded root element
+             stage.setScene(scene); // Sets the scene to the stage
+             stage.setTitle("Enter New Asset"); // Sets the title of the stage
+             stage.show(); // Shows the stage
+    	}catch(Exception e) {
+    		e.printStackTrace();// Prints the stack trace if an exception occurs
+    	}
+    	
+    }
+    @FXML
+    private void goToSearchPage(ActionEvent event) {
+    	
+    	try {
+    		Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+    		 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Search.fxml")); // Load the FXML file for page
+             Parent root = loader.load(); // Loads the root element of the FXML file
+             Scene scene = new Scene(root); // Creates a new scene with the loaded root element
+             stage.setScene(scene); // Sets the scene to the stage
+             stage.setTitle("Search"); // Sets the title of the stage
+             stage.show(); // Shows the stage
+    	}catch(Exception e) {
+    		e.printStackTrace();// Prints the stack trace if an exception occurs
+    	}
+    	
+    }
+    
+    @FXML
+    private void goToExpiredPage(ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ListAssetbyExpired.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Expired Warranties");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToListAssetbyCategory(ActionEvent event) {
+    	
+    	try {
+    		Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+    		 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ListAssetbyCategory.fxml")); // Load the FXML file for page
+             Parent root = loader.load(); // Loads the root element of the FXML file
+             Scene scene = new Scene(root); // Creates a new scene with the loaded root element
+             stage.setScene(scene); // Sets the scene to the stage
+             stage.setTitle("List Asset by Category"); // Sets the title of the stage
+             stage.show(); // Shows the stage
+    	}catch(Exception e) {
+    		e.printStackTrace();// Prints the stack trace if an exception occurs
+    	}
+    }
+    
+    @FXML
+    private void goToListAssetbyLocation(ActionEvent event) {
+    	
+    	try {
+    		Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+    		 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ListAssetbyLocation.fxml")); // Load the FXML file for page
+             Parent root = loader.load(); // Loads the root element of the FXML file
+             Scene scene = new Scene(root); // Creates a new scene with the loaded root element
+             stage.setScene(scene); // Sets the scene to the stage
+             stage.setTitle("List Asset by Location"); // Sets the title of the stage
+             stage.show(); // Shows the stage
+    	}catch(Exception e) {
+    		e.printStackTrace();// Prints the stack trace if an exception occurs
+    	}
+    }
+    
 }
