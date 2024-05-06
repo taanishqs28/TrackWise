@@ -206,15 +206,15 @@ public class EditAssetController {
 	@FXML
 	private void goHome() {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Welcome.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Welcome.fxml"));     // Load the FXML file into a Parent node
 			Parent root = loader.load();
 			Stage stage = (Stage) assetNameLabel.getScene().getWindow();
-			Scene scene = new Scene(root);
+			Scene scene = new Scene(root);	        // Create a new scene with the loaded FXML file
 			stage.setTitle("Welcome Home");
-			stage.setScene(scene);
+			stage.setScene(scene);			// Set the scene of the stage to the loaded FXML scene
 			stage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace();         // Print stack trace if an IOException occurs
 		}
 	}
 
