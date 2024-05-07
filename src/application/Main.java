@@ -1,6 +1,7 @@
 package application;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -63,7 +64,11 @@ public class Main extends Application {
             
          // Check for expired warranties
             if (hasExpiredWarranties()) {
-                warrantyWarning();
+                System.out.println("Expired Warranties found.");
+            	warrantyWarning();
+            }
+            else {
+            	System.out.println("No expired Warranties.");
             }
         } catch(Exception e) {
             e.printStackTrace(); // Prints any exceptions that occur during the loading and showing process
@@ -103,15 +108,36 @@ public class Main extends Application {
      * @return The parsed AssetInfo object.
      */
     private AssetInfo parseAssetInfo(String line) {
-        String[] parts = line.split(",");
+    	String[] parts = line.split(",");
+        LocalDate purchaseDate = null;
+        LocalDate warrantyExpirationDate = null;
+
+        // Safely parse the purchase date if it is provided and valid
+        if (!parts[3].trim().isEmpty() && !parts[3].trim().equalsIgnoreCase("No date provided")) {
+            try {
+                purchaseDate = LocalDate.parse(parts[3].trim());
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid purchase date format for line: " + line);
+            }
+        }
+
+        // Safely parse the warranty expiration date if it is provided and valid
+        if (!parts[6].trim().isEmpty() && !parts[6].trim().equalsIgnoreCase("No date provided")) {
+            try {
+                warrantyExpirationDate = LocalDate.parse(parts[6].trim());
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid warranty expiration date format for line: " + line);
+            }
+        }
+
         return new AssetInfo(
-                parts[0].trim(),
-                parts[1].trim(),
-                parts[2].trim(),
-                LocalDate.parse(parts[3].trim()),
-                parts[4].trim(),
-                parts[5].trim(),
-                LocalDate.parse(parts[6].trim())
+            parts[0].trim(),  // Name
+            parts[1].trim(),  // Category
+            parts[2].trim(),  // Location
+            purchaseDate,     // Purchase date (can be null)
+            parts[4].trim(),  // Description
+            parts[5].trim(),  // Purchased value
+            warrantyExpirationDate  // Warranty expiration date (can be null)
         );
     }
     
